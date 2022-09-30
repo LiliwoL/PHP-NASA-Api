@@ -4,3 +4,4 @@ images/*
 gif/*
 .idea
 vendor
+composer.lock
