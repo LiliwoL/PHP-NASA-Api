@@ -18,9 +18,16 @@ Sur cette adresse, on peut trouver la liste des dates disponibles.
 
 ***
 
-## Les outils à avoir sur le serveur
+## TODO:
 
-Pour redimensionner des images, et créer un gif en ligne de commande, on utilise **ImageMagick**.
+* Pour redimensionner des images et créer un gif en ligne de commande, on utilise **ImageMagick**.
+* Définir le fichier **.env** avec les variables personnalisées suivantes:
+
+`env
+API_ENDPOINT="https://epic.gsfc.nasa.gov/api/enhanced/date/" # You can keep it
+API_KEY=''                                             # Your NASA's API Key
+MAILER_DSN='smtp://user_name:password@smtp.host:port'  # Use Mailtrap.io
+`
 
 ***
 
