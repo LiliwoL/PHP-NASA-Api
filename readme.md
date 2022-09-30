@@ -6,6 +6,17 @@ Les images sont téléchargées en local, dans un dossier correspondant à la da
 Les images sont redimensionnées.
 Puis un gif est généré et envoyé par mail.
 
+## Déroulé
+
+* Demande d'une date à l'utilisateur
+* Requête API pour récupérer le JSON de la date
+* Parcours du JSON reçu et téléchargement des images
+* Redimensionnement des images
+* Génération d'un GIF
+* Envoi par mail du GIF
+
+***
+
 ## L'API
 
 * Plus d'infos sur l'API en question:
