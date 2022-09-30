@@ -1,0 +1,6 @@
+{
+    "require": {
+        "symfony/mailer": "^6.1",
+        "vlucas/phpdotenv": "^5.4"
+    }
+}
