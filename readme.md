@@ -75,7 +75,7 @@ Sera utilisé pour disposer de variables d'environnement
 
 https://packagist.org/packages/vlucas/phpdotenv
 
-`composer require vlucas/phpdotenv`
+`PHP_OAuth_GitHub`
 
 ***
 
