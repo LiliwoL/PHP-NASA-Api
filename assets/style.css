@@ -1,53 +1,305 @@
-body{
-	background: -webkit-linear-gradient(left, #0072ff, #00c6ff);
+/*import google fonts: with @import:*/
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap");
+
+/*import google fonts: poppins Regular 400*/
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+/*i use it for define some variables with hex color*/
+:root {
+	--color-white: #d1d1d1;
 }
-.contact-form{
-	background: #fff;
-	margin-top: 10%;
-	margin-bottom: 5%;
-	width: 70%;
+
+/*
+content					i have write nothing because i want background only
+position				fixed: positioned relative to the viewport, which means it always stays in the same place even if the page is scrolled (from: w3school)
+top						  0 margin top
+left					  0 margin left
+height					100% of page
+width					  100% of page
+z-index:-1				in background
+background-image
+linear-gradient		tot deg which i start with color-gradient(from color to a another color)
+rgba				red green blue alpha (opacity)
+
+background size:
+	- auto				original size	
+	- length			We decide the size (width,  height)	
+	- percentage		We decide the size in percent of the parent element
+	- cover				Resize the background image to cover the entire container <--- i use this
+	- contain			Resize the background image to make sure the image is fully visible	
+	- initial			Sets this property to its default value
+*/
+body::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -1;
+
+	background-image: linear-gradient(
+			180deg,
+			rgba(1, 1, 42, 0.8),
+			rgba(37, 37, 37, 0.7)
+	),
+	url(https://i.pinimg.com/originals/a5/fd/da/a5fddaabea95c1000320ae4eaa4cb60c.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 }
-.contact-form .form-control{
-	border-radius:1rem;
+
+/*
+background-color		i used the color variable, declared in root
+color					the color of the text
+text align				text centered
+padding					some padding in all directions
+margin					i decided some margine for the title
+border-radius			is more kawaii XD; the border have some radius
+font-family				i used the font i imported from google fonts
+animation-name			name used for identify this effect
+animation-duration		how long is the animation
+an.-iteration-count		how musch time i want to repeat it
+*/
+#title {
+	background-color: var(--color-white);
+	color: black;
+	text-align: center;
+	padding: 1%;
+	margin: 1.5% 30% 0% 30%;
+	border-radius: 30px;
+	font-family: "IBM Plex Sans", sans-serif;
+	animation-name: change-title-color;
+	animation-duration: 10s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
 }
-.contact-image{
+
+/*
+keyframe + declared animation name 				used for decide the animation rule
+0%					at 0% of the animation
+trasform:scale		i can choose do it larger or smaller, in this case smaller
+50%					return original
+100%				reduce the dimension
+*/
+@keyframes change-title-color {
+	0% {
+		transform: scale(0.95);
+	}
+	50% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0.95);
+	}
+}
+
+@media (max-width: 500px) {
+	#title {
+		margin-left: 10%;
+		margin-right: 10%;
+	}
+}
+
+#description {
+	color: black;
+	text-align: center;
+	transition: 0.3s;
+	animation-name: i_exist;
+	animation-iteration-count: infinite;
+	animation-duration: 15s;
+	animation-timing-function: linear;
+}
+
+/*
+my first idea of this descriprion: when im on/hover of the description, it will transform in another color with more contrst ratio
+#i_exist:hover {
+	color: var(--color-white);
 	text-align: center;
 }
-.contact-image img{
-	border-radius: 6rem;
-	width: 11%;
-	margin-top: -3%;
-	/*transform: rotate(29deg);*/
+*/
+
+@keyframes i_exist {
+	0% {
+		color: black;
+	}
+	50% {
+		color: #d1d1d150;
+	}
+	100% {
+		color: black;
+	}
 }
-.contact-form form{
-	padding: 14%;
+
+#survey-form {
+	background: rgba(209, 209, 209, 0.6);
+	margin-left: 20%;
+	margin-right: 20%;
+	padding: 1% 5% 2.5% 5%;
 }
-.contact-form form .row{
-	margin-bottom: -7%;
+
+/*
+@media			rule for different screen (ipad, pc, phone, etc.)
+*/
+
+@media (max-width: 500px) {
+	#survey-form {
+		margin-left: 5%;
+		margin-right: 5%;
+	}
 }
-.contact-form h3{
-	margin-bottom: 8%;
-	margin-top: -10%;
-	text-align: center;
-	color: #0062cc;
+
+label {
+	color: black;
+	font-family: "Poppins", sans-serif;
+	font-size: larger;
+	text-size-adjust: bold;
 }
-.contact-form .btnContact {
-	width: 50%;
-	border: none;
-	border-radius: 1rem;
+
+/*class for every input space with #d1d1d1 background color and small google font*/
+.form-input-css {
+	display: block;
+	margin-top: 1%;
+	background-color: var(--color-white);
+	border-radius: 20px;
+	border-width: 4px;
 	padding: 1.5%;
-	background: #dc3545;
-	font-weight: 600;
-	color: #fff;
-	cursor: pointer;
+	border-color: rgba(1, 1, 42, 0.4);
+	width: 100%;
+	color: black;
+	font-family: "IBM Plex Sans", sans-serif;
+	font-size: small;
 }
-.btnContactSubmit
-{
-	width: 50%;
-	border-radius: 1rem;
+
+/*the space between the form*/
+.form-space {
+	margin-top: 5%;
+}
+
+/*
+from: https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing
+ 
+content-box
+This is the initial and default value as specified by the CSS standard. The width and height properties include the content, but does not 
+include the padding, border, or margin. For example, .box {width: 350px; border: 10px solid black;} renders a box that is 370px wide.
+
+border-box
+The width and height properties include the content, padding, and border, but do not include the margin. Note that padding and border will 
+be inside of the box. For example, .box {width: 350px; border: 10px solid black;} renders a box that is 350px wide, with the area for content 
+being 330px wide. The content box can't be negative and is floored to 0, making it impossible to use border-box to make the element disappear.
+*/
+select {
+	box-sizing: border-box;
 	padding: 1.5%;
-	color: #fff;
-	background-color: #0062cc;
-	border: none;
-	cursor: pointer;
+}
+
+/*id with some css for the dropdown option text*/
+#dropdown {
+	background-color: var(--color-white);
+	border-radius: 20px;
+	border: 4px solid rgba(1, 1, 42, 0.4);
+	width: 100%;
+	color: black;
+	font-family: "IBM Plex Sans", sans-serif;
+	font-size: small;
+	border-style: solid;
+	margin-top: 1%;
+}
+
+.radio_input_css {
+	display: initial;
+}
+
+.input-checkbox {
+	display: initial;
+}
+
+.textarea_css {
+	display: block;
+	background-color: var(--color-white);
+	border-radius: 20px;
+	border: 4px solid rgba(1, 1, 42, 0.4);
+	width: 100%;
+	height: 150px;
+	color: black;
+	font-family: "IBM Plex Sans", sans-serif;
+	font-size: small;
+	border-style: solid;
+	margin-top: 1%;
+	resize: vertical;
+	padding: 1% 2% 2% 1%;
+}
+
+.submit-button-class {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--color-white);
+	border-radius: 5px;
+	border: 4px solid rgba(1, 1, 42, 0.4);
+	font-family: "IBM Plex Sans", sans-serif;
+	font-size: larger;
+}
+
+.submit-button-class::before {
+	content: "";
+	display: flex;
+	height: 10px;
+	width: 10px;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: rgba(0, 0, 255, 0.356);
+	background-color: white;
+	margin-right: 1.5%;
+	animation-name: submit-button-class-left;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes submit-button-class-left {
+	0% {
+		margin-right: 5%;
+		width: 10px;
+	}
+	50% {
+		margin-right: 1.5%;
+		width: 15px;
+	}
+	100% {
+		margin-right: 5%;
+		width: 10px;
+	}
+}
+
+.submit-button-class::after {
+	content: "";
+	display: flex;
+	height: 10px;
+	width: 10px;
+	border-style: solid;
+	border-radius: 5px;
+	border-color: rgba(0, 0, 255, 0.356);
+	background-color: white;
+	margin-left: 1.5%;
+	animation-name: submit-button-class-right;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes submit-button-class-right {
+	0% {
+		margin-left: 5%;
+		width: 10px;
+	}
+	50% {
+		margin-left: 1.5%;
+		width: 15px;
+	}
+	100% {
+		margin-left: 5%;
+		width: 10px;
+	}
 }

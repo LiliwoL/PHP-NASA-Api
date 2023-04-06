@@ -2,6 +2,12 @@
 
 include_once('./vendor/autoload.php');
 
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+
+
+
 
 /**
  * Chargement des variables d'environnement
@@ -14,11 +20,6 @@ $dotenv->load();
 (string) $mailer_dsn = $_ENV['MAILER_DSN'];
 
 
-// Uses
-use Symfony\Component\Mailer\Transport;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mime\Email;
-
 // ###################################################
 
 /**
@@ -29,11 +30,11 @@ use Symfony\Component\Mime\Email;
  * Renvoi d'une erreur ou la chaine JSON
  * @todo Use Guzzle instead of curl
  */
-function get_day_data( $endpoint ) : string | array
+function get_day_data( $endpoint ) : string|array
 {
 	// Amélioration: https://www.geeksforgeeks.org/why-use-guzzle-instead-of-curl-in-php/?ref=rp
 
-	// Pour faire la requête on va utiliser cUrl
+	// Pour faire la requête, on va utiliser cUrl
 	$ch = curl_init();
 
 	// User Agent
@@ -255,6 +256,13 @@ function displayMessage ( string $msg, int $color, array $T_spaces) : void
 } #displayMessage ($msg, $color, $spaces)
 
 
+/**
+ * À partir d'un dossier $folder, les images sont compilées en un fichier GIF avec le nom $filename
+ *
+ * @param $folder
+ * @param $filename
+ * @return string
+ */
 function makeAGif ( $folder, $filename ): string
 {
 	// Vérification si le dossier existe, sinon, on le crée
@@ -288,7 +296,24 @@ function makeAGif ( $folder, $filename ): string
 	return ( getcwd() . "/gif/" . $filename . "/" . $filename . ".gif" );
 } #makeAGif ( $folder, $filename )
 
+// #################################################################################################################
 
+//   __  __       _ _
+// |  \/  | __ _(_) |
+// | |\/| |/ _` | | |
+// | |  | | (_| | | |
+// |_|  |_|\__,_|_|_|
+
+/**
+ * Envoi d'un mail en utiloisant le DSN défini dans le fichier .env
+ *
+ * @param string $to
+ * @param string $subject
+ * @param string $message
+ * @param string $filename
+ * @return void
+ * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+ */
 function sendMail (string $to, string $subject, string $message, string $filename ): void
 {
 	$mailer = initMailer();
@@ -343,38 +368,82 @@ function initMailer(): Mailer
 // ###########################################
 
 /**
- * Interaction avec l'utilisateur
+ * En cas de requête POST
  *
- * Toute la partie suivante pourrait se faire via un client navigateur plutôt qu'en ligne de commande
+ * TODO: vérification correcte de CSRF
  */
+if ( isset($_POST['csrf-token']) && $_POST['csrf-token'] == 'ici_on_met_un_jeton_csrf_de_malade' ) {
 
- // On demande à l'utilisateur de saisir une date
-$date_user = readline("Saisir une date au format YYYY-MM-DD:\n");
+    // Date
+    $date_user = htmlspecialchars($_POST['date']);
 
-// Au cas où rien n'est tap, on saisi une valeur par défaut
-$date_user = ( $date_user == '' ) ? '2018-06-12' : $date_user;
-// @todo Vérifier la saisie de l'utilisateur
+    // Message
+    $message = htmlspecialchars($_POST['message']);
 
+    // Nom destinataire
+    $destName = htmlspecialchars($_POST['name']);
 
-
-// Construction du endPoint avec la date a la clé API
-$today_api_endpoint = $api_endpoint . $date_user . "?api_key=" . $api_key;
-
-// Affichage d'un texte avec de la couleur et un espace en bas
-// cf. fonction displayMessage
-displayMessage( "Recherche de " . $today_api_endpoint, 32, ['bottom'] );
+    // Mail destinataire
+    $destEmail = htmlspecialchars($_POST['email']);
 
 
+    // Construction du endPoint avec la date a la clé API
+    $today_api_endpoint = $api_endpoint . $date_user . "?api_key=" . $api_key;
 
-// Requete + Download
-// @todo: en cas de réponse vide
-$parsing = parse_and_download_data ( get_day_data( $today_api_endpoint ) );
+    // Requete + Download
+    // @todo: en cas de réponse vide
+    $parsing = parse_and_download_data ( get_day_data( $today_api_endpoint ) );
 
-if ($parsing)
-{
-	// Création d'un GIF à partir des images d'un dossier
-	$gif_filename = makeAGif( "./images/" . $date_user, $date_user );
+    if ($parsing)
+    {
+        // Création d'un GIF à partir des images d'un dossier
+        $gif_filename = makeAGif( "./images/" . $date_user, $date_user );
 
-	// Envoi d'un mail avec le GIF en PJ
-	sendMail ( "marie@marie.com", "La terre le " . $date_user , "La terre vue du ciel le " . $date_user, $gif_filename );
+        // Envoi d'un mail avec le GIF en PJ
+        try {
+            sendMail($destEmail, "Pour mon amour, La terre le " . $date_user, $message, $gif_filename);
+        }
+        catch( Exception $exception ){
+            echo "Erreur";
+        }
+    }
+
+}else{
+    /**
+     * Interaction avec l'utilisateur
+     *
+     * Toute la partie suivante pourrait se faire via un client navigateur plutôt qu'en ligne de commande
+     */
+
+    // On demande à l'utilisateur de saisir une date
+    $date_user = readline("Saisir une date au format YYYY-MM-DD:\n");
+
+    // Au cas où rien n'est tap, on saisi une valeur par défaut
+        $date_user = ( $date_user == '' ) ? '2018-06-12' : $date_user;
+    // @todo Vérifier la saisie de l'utilisateur
+
+
+
+    // Construction du endPoint avec la date a la clé API
+        $today_api_endpoint = $api_endpoint . $date_user . "?api_key=" . $api_key;
+
+    // Affichage d'un texte avec de la couleur et un espace en bas
+    // cf. fonction displayMessage
+    displayMessage( "Recherche de " . $today_api_endpoint, 32, ['bottom'] );
+
+
+
+    // Requete + Download
+    // @todo: en cas de réponse vide
+    $parsing = parse_and_download_data ( get_day_data( $today_api_endpoint ) );
+
+    if ($parsing)
+    {
+        // Création d'un GIF à partir des images d'un dossier
+        $gif_filename = makeAGif( "./images/" . $date_user, $date_user );
+
+        // Envoi d'un mail avec le GIF en PJ
+        sendMail ( "marie@marie.com", "La terre le " . $date_user , "La terre vue du ciel le " . $date_user, $gif_filename );
+    }
+
 }

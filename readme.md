@@ -6,6 +6,10 @@ Les images sont téléchargées en local, dans un dossier correspondant à la da
 Les images sont redimensionnées.
 Puis un gif est généré et envoyé par mail.
 
+## Pré-requis
+
+PHP >= 8.1.0
+
 ## Déroulé
 
 * Demande d'une date à l'utilisateur
@@ -34,11 +38,11 @@ Sur cette adresse, on peut trouver la liste des dates disponibles.
 * Pour redimensionner des images et créer un gif en ligne de commande, on utilise **ImageMagick**.
 * Définir le fichier **.env** avec les variables personnalisées suivantes:
 
-`env
+```dotenv
 API_ENDPOINT="https://epic.gsfc.nasa.gov/api/enhanced/date/" # You can keep it
 API_KEY=''                                             # Your NASA's API Key
 MAILER_DSN='smtp://user_name:password@smtp.host:port'  # Use Mailtrap.io
-`
+```
 
 ***
 
