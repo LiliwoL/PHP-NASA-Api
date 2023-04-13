@@ -1,0 +1,2 @@
+<label for="reduc">Création de l'animation:</label>
+                        <progress id="anim" max="100" value="100"></progress>

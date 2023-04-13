@@ -83,3 +83,6 @@ https://packagist.org/packages/vlucas/phpdotenv
 
 ***
 
+### TODO
+
+Affichage de la progression avec des xhr pour avoir un état
